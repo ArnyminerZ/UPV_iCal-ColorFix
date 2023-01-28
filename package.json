@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/ArnyminerZ/UPV_iCal-ColorFix/issues"
   },
-  "homepage": "https://github.com/ArnyminerZ/UPV_iCal-ColorFix#readme"
+  "homepage": "https://github.com/ArnyminerZ/UPV_iCal-ColorFix#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
