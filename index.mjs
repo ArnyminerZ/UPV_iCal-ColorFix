@@ -21,7 +21,7 @@ app.get('*', (req, res) => {
                 // Replace UPV_BGCOLOR by COLOR
                 .replace('UPV_BGCOLOR', 'COLOR')
                 // Remove fields with UPV_FGCOLOR
-                .replace(/UPV_FGCOLOR:#[\d(a-fA-F)]*\n?/g, '');
+                .replace(/UPV_FGCOLOR:#[\d(a-fA-F)]*\r?\n|\r/g, '');
             res.status(response.statusCode).send(formattedData);
         });
     });
