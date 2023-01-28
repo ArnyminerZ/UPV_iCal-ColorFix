@@ -1,6 +1,8 @@
 import express from 'express';
 import https from 'https';
 
+import {fix} from "./parser.mjs";
+
 const app = express();
 
 const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
@@ -17,11 +19,7 @@ app.get('*', (req, res) => {
 
         response.on('data', chunk => data.push(chunk));
         response.on('end', () => {
-            let formattedData = data.join('')
-                // Replace UPV_BGCOLOR by COLOR
-                .replaceAll('UPV_BGCOLOR', 'COLOR')
-                // Remove fields with UPV_FGCOLOR
-                .replaceAll(/UPV_FGCOLOR:#[\d(a-fA-F)]*\r?\n|\r/g, '');
+            let formattedData = fix(data.join(''));
             res.status(response.statusCode).send(formattedData);
         });
     });
