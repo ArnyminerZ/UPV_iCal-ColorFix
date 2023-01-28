@@ -36,6 +36,20 @@ You can use the production version, which fetches the image from [Docker Hub][do
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
+If you want to use the app without cloning the repo, you can use the following docker compose file:
+```yaml
+# docker-compose.yml
+version: '3.7'
+
+services:
+  app:
+    image: arnyminerz/upv-ical-fix:latest
+    container_name: UPV_iCal-ColorFix
+    restart: unless-stopped
+    ports:
+      - "80:80"
+```
+
 ## NodeJS
 It's required to have installed [npm](https://www.npmjs.com/) in the system. Then download the source code with `git`:
 ```shell
