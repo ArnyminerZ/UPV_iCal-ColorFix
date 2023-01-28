@@ -7,4 +7,4 @@ export const fix = (original) => original
     // Replace UPV_BGCOLOR by COLOR
     .replaceAll('UPV_BGCOLOR', 'COLOR')
     // Remove fields with UPV_FGCOLOR
-    .replaceAll(/UPV_FGCOLOR:#[\d(a-fA-F)]*\r?\n|\r/g, '');
+    .replaceAll(/UPV_FGCOLOR:.*\r?\n|\r/g, '');
