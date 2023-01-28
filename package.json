@@ -1,6 +1,6 @@
 {
   "name": "upv_ical-colorfix",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fixes the wrongly iCal-formatted calendars provided by UPV, which contain custom properties non-parseable by some clients.",
   "main": "index.mjs",
   "scripts": {
