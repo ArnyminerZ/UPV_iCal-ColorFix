@@ -1,0 +1,27 @@
+{
+  "name": "upv_ical-colorfix",
+  "version": "1.0.0-dev01",
+  "description": "Fixes the wrongly iCal-formatted calendars provided by UPV, which contain custom properties non-parseable by some clients.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArnyminerZ/UPV_iCal-ColorFix.git"
+  },
+  "keywords": [
+    "upv",
+    "ical",
+    "fix",
+    "bug",
+    "calendar",
+    "color"
+  ],
+  "author": "Arnau Mora",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArnyminerZ/UPV_iCal-ColorFix/issues"
+  },
+  "homepage": "https://github.com/ArnyminerZ/UPV_iCal-ColorFix#readme"
+}
