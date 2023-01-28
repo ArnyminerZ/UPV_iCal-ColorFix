@@ -19,9 +19,9 @@ app.get('*', (req, res) => {
         response.on('end', () => {
             let formattedData = data.join('')
                 // Replace UPV_BGCOLOR by COLOR
-                .replace('UPV_BGCOLOR', 'COLOR')
+                .replaceAll('UPV_BGCOLOR', 'COLOR')
                 // Remove fields with UPV_FGCOLOR
-                .replace(/UPV_FGCOLOR:#[\d(a-fA-F)]*\r?\n|\r/g, '');
+                .replaceAll(/UPV_FGCOLOR:#[\d(a-fA-F)]*\r?\n|\r/g, '');
             res.status(response.statusCode).send(formattedData);
         });
     });
