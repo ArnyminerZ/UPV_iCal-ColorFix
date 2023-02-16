@@ -20,6 +20,11 @@ app.get('*', (req, res) => {
         response.on('data', chunk => data.push(chunk));
         response.on('end', () => {
             let formattedData = fix(data.join(''));
+            formattedData = formattedData
+                // Replace bold HTML annotations to Markdown
+                .replace(/(<b>)|(<\/b>)/gm, '**')
+                // Replace HTML line-break annotations to \n
+                .replace(/<br\/?>/gm, '\n');
             res.status(response.statusCode).send(formattedData);
         });
     });
