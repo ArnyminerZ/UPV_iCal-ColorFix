@@ -3,8 +3,10 @@
   "version": "1.0.5",
   "description": "Fixes the wrongly iCal-formatted calendars provided by UPV, which contain custom properties non-parseable by some clients.",
   "main": "index.mjs",
+  "type": "module",
   "scripts": {
-    "start": "node index.mjs"
+    "start": "node index.mjs",
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -26,5 +28,10 @@
   "homepage": "https://github.com/ArnyminerZ/UPV_iCal-ColorFix#readme",
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7",
+    "node-ical": "^0.15.3"
   }
 }

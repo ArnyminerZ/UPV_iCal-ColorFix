@@ -1,0 +1,21 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    name: ✅ Test
+    steps:
+      - name: 🖥️ Checkout
+        uses: actions/checkout@v3
+      - name: 🟢 Setup node
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version: 18
+      - name: ☁️ Install dependencies
+        run: npm install
+      - name: ✅ Run tests
+        run: npm run test
