@@ -5,6 +5,11 @@ on:
     branches:
       - 'master'
 
+permissions: write-all
+
+concurrency:
+  group: docker-ci
+
 jobs:
   draft-release:
     runs-on: ubuntu-latest
