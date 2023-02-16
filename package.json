@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.mjs",
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "version": "node update_version.js"
   },
   "repository": {
     "type": "git",
