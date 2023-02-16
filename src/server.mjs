@@ -3,11 +3,17 @@ import https from 'https';
 
 import {fix} from "./parser.mjs";
 
+import packageJson from "../package.json" assert { type: "json" };
+
 const app = express();
 
 const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 
 export default function (port = 80) {
+    app.get('/version', (req, res) => {
+        res.status(200).send(packageJson.version);
+    });
+
     app.get('*', (req, res) => {
         // Take from 1 since all paths start with /
         const path = req.path.substring(1);
