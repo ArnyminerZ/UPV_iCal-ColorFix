@@ -68,8 +68,8 @@ npm start
 
 [ci-badge]: https://img.shields.io/github/actions/workflow/status/ArnyminerZ/UPV_iCal-ColorFix/docker-ci.yml?style=for-the-badge
 [release-badge]: https://img.shields.io/github/actions/workflow/status/ArnyminerZ/UPV_iCal-ColorFix/docker-release.yml?style=for-the-badge
-[docker-date-badge]: https://img.shields.io/docker/v/arnyminerz/upv-ical-fix?style=for-the-badge
-[docker-semver-badge]: https://img.shields.io/docker/v/arnyminerz/upv-ical-fix?style=for-the-badge
+[docker-date-badge]: https://img.shields.io/docker/v/arnyminerz/upv-ical-fix?style=for-the-badge&sort=date&label=Latest%20Dev
+[docker-semver-badge]: https://img.shields.io/docker/v/arnyminerz/upv-ical-fix?style=for-the-badge&sort=semver&label=Last%20Version
 [docker-size-badge]: https://img.shields.io/docker/image-size/arnyminerz/upv-ical-fix?style=for-the-badge
 [ci-url]: https://github.com/ArnyminerZ/UPV_iCal-ColorFix/actions/workflows/docker-ci.yml
 [release-url]: https://github.com/ArnyminerZ/UPV_iCal-ColorFix/actions/workflows/docker-release.yml
