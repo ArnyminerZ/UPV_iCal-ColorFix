@@ -27,7 +27,7 @@ jobs:
       - name: 🟢 Setup node
         uses: actions/setup-node@v4.0.1
         with:
-          node-version: 18
+          node-version: 20
       - name: 📦 Update package.json
         id: update_package
         env:
