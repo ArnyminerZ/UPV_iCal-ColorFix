@@ -67,7 +67,7 @@ export default function (port = 80) {
         // Take from 1 since all paths start with /
         const path = req.path.substring(1);
         if (path.startsWith('https://poliformat.upv.es')) {
-            const uid = path.substring(47);
+            const uid = path.substring(47).replace('/main.ics', '');
             response.redirect(`/poliformat/${uid}`);
         } else if (path.startsWith('https://www.upv.es')) {
             const code = path.substring(24);
