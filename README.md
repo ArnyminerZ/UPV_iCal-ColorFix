@@ -17,11 +17,27 @@ Calling the app (e.g. hosted at `localhost`) and passing as the path the url of 
 request by you, and return you the contents with the `UPV_FGCOLOR` removed, and `UPV_BGCOLOR` replaced by
 [`COLOR`](https://icalendar.org/New-Properties-for-iCalendar-RFC-7986/5-9-color-property.html).
 
-Example:
-```shell
-curl http://localhost/https://www.upv.es/ical/...
+## PoliformaT links
+
+PoliformaT offers you to synchronize your agenda through iCal. To do so, a link similar to this one is provided:
 ```
-_Note: https must always be used._
+https://poliformat.upv.es/access/calendar/opaq/.../main.ics
+```
+To load PoliformaT links, take the UUID missing from the link above, and add it as follows:
+```
+http://localhost/poliformat/<UUID>
+```
+
+## Intranet links
+
+Just like PoliformaT, intranet gives you the links as
+```
+https://www.upv.es/ical/...
+```
+Take the code missing above, and add it to
+```
+http://localhost/poliformat/<CODE>
+```
 
 # Deploying
 ## Docker

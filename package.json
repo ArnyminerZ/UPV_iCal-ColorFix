@@ -32,7 +32,8 @@
   "devDependencies": {
     "mocha": "^10.2.0",
     "chai": "^5.0.0",
-    "node-ical": "^0.17.1"
+    "node-ical": "^0.17.1",
+    "uuidv4": "^6.2.13"
   },
   "version": "1.0.9"
 }
