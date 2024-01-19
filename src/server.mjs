@@ -4,7 +4,14 @@ import {convertMarkdown, fix} from "./parser.mjs";
 
 import packageJson from "../package.json" assert { type: "json" };
 import {get} from "./request-utils.mjs";
-import {intranetUrlBuilder, poliformatUrlBuilder} from "./url-builder.mjs";
+import {
+    intranetUrlBuilder,
+    intranetUrlPrefix,
+    intranetUrlSuffix,
+    poliformatUrlBuilder,
+    poliformatUrlPrefix,
+    poliformatUrlSuffix
+} from "./url-builder.mjs";
 
 const app = express();
 
@@ -29,7 +36,7 @@ async function fetchAndRespond(
     try {
         const url = urlBuilder(request.params);
         const data = await get(url);
-        const fixedData = fix(data);
+        const fixedData = fix(data.toString());
         const markdown = convertMarkdown(fixedData);
         response
             // Set status to success
@@ -38,13 +45,13 @@ async function fetchAndRespond(
             .setHeader('Content-Type', 'text/calendar')
             // Send the data
             .send(markdown);
-    } catch (e) {
-        if (e.hasOwnProperty('statusCode')) {
-            const status = e['statusCode'];
-            const message = e['statusMessage'] ?? status;
+    } catch (error) {
+        if (error.hasOwnProperty('statusCode')) {
+            const status = error['statusCode'];
+            const message = error['statusMessage'] ?? status;
             response.status(status).send(message);
         } else {
-            response.status(500).send(e);
+            response.status(500).send(JSON.stringify(error));
         }
     }
 }
@@ -64,17 +71,19 @@ export default function (port = 80) {
     app.get('*', (req, response) => {
         // Take from 1 since all paths start with /
         const path = req.path.substring(1);
-        if (path.startsWith('https://poliformat.upv.es')) {
-            const uid = path.substring(47).replace('/main.ics', '');
+        const url = new URL(path);
+        if (!url.hostname.includes('upv.es')) {
+            response.status(400).send('400 - Invalid request. Forbidden domain');
+        } else if (path.length <= 0) {
+            response.status(400).send('400 - Invalid request. Empty URL');
+        } else if (url.hostname === 'poliformat.upv.es') {
+            const uid = path.replace(poliformatUrlPrefix, '').replace(poliformatUrlSuffix, '');
             response.redirect(`/poliformat/${uid}`);
-        } else if (path.startsWith('https://www.upv.es')) {
-            const code = path.substring(24);
+        } else if (url.hostname === 'upv.es' || url.hostname === 'www.upv.es') {
+            const code = path.replace(intranetUrlPrefix, '').replace(intranetUrlSuffix, '');
             response.redirect(`/intranet/${code}`);
         } else {
-            if (path.length <= 0)
-                response.status(400).send('400 - Invalid request. Empty URL');
-            else
-                response.status(400).send('400 - Invalid request. Unknown URL');
+            response.status(400).send('400 - Invalid request. Unknown URL');
         }
     });
 
