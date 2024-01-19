@@ -1,4 +1,4 @@
-import {isUuid} from "uuidv4";
+import {validate} from "uuid";
 
 /**
  * @callback UrlBuilder
@@ -25,7 +25,7 @@ export function poliformatUrlBuilder(params) {
     const uuid = params.uid;
 
     // Validate the uuid
-    if (!isUuid(uuid)) throw { statusCode: 400, statusMessage: '400 - The given UUID is not valid' };
+    if (!validate(uuid)) throw { statusCode: 400, statusMessage: '400 - The given UUID is not valid' };
 
     // Everything is fine, build the final URL
     return buildUrl(poliformatUrlPrefix, poliformatUrlSuffix, uuid);
