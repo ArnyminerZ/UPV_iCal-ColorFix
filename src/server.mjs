@@ -9,13 +9,25 @@ import {get} from "./request-utils.mjs";
 const app = express();
 
 /**
+ * @callback UrlBuilder
+ * @param {{}} params
+ * @return {string}
+ */
+
+/**
  * Fetches the data from the URL given, fixes it, converts to markdown, and sends the response.
- * @param {string} url
+ * @param {import('express').Request} request
  * @param {import('express').Response} response
+ * @param {UrlBuilder} urlBuilder
  * @returns {Promise<void>}
  */
-async function fetchAndRespond(url, response) {
+async function fetchAndRespond(
+    request,
+    response,
+    urlBuilder
+) {
     try {
+        const url = urlBuilder(request.params);
         const data = await get(url);
         const fixedData = fix(data);
         const markdown = convertMarkdown(fixedData);
@@ -29,7 +41,7 @@ async function fetchAndRespond(url, response) {
     } catch (e) {
         if (e.hasOwnProperty('statusCode')) {
             const status = e['statusCode'];
-            const message = e['statusMessage'];
+            const message = e['statusMessage'] ?? status;
             response.status(status).send(message);
         } else {
             response.status(500).send(e);
@@ -42,25 +54,25 @@ export default function (port = 80) {
         res.status(200).send(packageJson.version);
     });
 
-    app.get('/poliformat/:uid', async (req, response) => {
-        const params = req.params;
-        /** @type {string} */
-        const uuid = params.uid;
+    app.get('/poliformat/:uid', async (request, response) => {
+        await fetchAndRespond(request, response, (params) => {
+            /** @type {string} */
+            const uuid = params.uid;
 
-        // Validate the uuid
-        if (!isUuid(uuid))
-            return response.status(400).send('400 - The given UUID is not valid');
+            // Validate the uuid
+            if (!isUuid(uuid)) throw { statusCode: 400, statusMessage: '400 - The given UUID is not valid' };
 
-        const url = `https://poliformat.upv.es/access/calendar/opaq/${uuid}/main.ics`;
-        await fetchAndRespond(url, response);
+            // Everything is fine, build the final URL
+            return `https://poliformat.upv.es/access/calendar/opaq/${uuid}/main.ics`;
+        });
     });
-    app.get('/intranet/:code', async (req, response) => {
-        const params = req.params;
-        /** @type {string} */
-        const code = params.code;
+    app.get('/intranet/:code', async (request, response) => {
+        await fetchAndRespond(request, response, (params) => {
+            /** @type {string} */
+            const code = params.code;
 
-        const url = `https://www.upv.es/ical/${code}`;
-        await fetchAndRespond(url, response);
+            return `https://www.upv.es/ical/${code}`;
+        });
     });
 
     app.get('*', (req, response) => {
