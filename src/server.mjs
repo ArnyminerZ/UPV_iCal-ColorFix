@@ -1,10 +1,10 @@
 import express from 'express';
-import { isUuid } from 'uuidv4';
 
 import {convertMarkdown, fix} from "./parser.mjs";
 
 import packageJson from "../package.json" assert { type: "json" };
 import {get} from "./request-utils.mjs";
+import {intranetUrlBuilder, poliformatUrlBuilder} from "./url-builder.mjs";
 
 const app = express();
 
@@ -55,24 +55,10 @@ export default function (port = 80) {
     });
 
     app.get('/poliformat/:uid', async (request, response) => {
-        await fetchAndRespond(request, response, (params) => {
-            /** @type {string} */
-            const uuid = params.uid;
-
-            // Validate the uuid
-            if (!isUuid(uuid)) throw { statusCode: 400, statusMessage: '400 - The given UUID is not valid' };
-
-            // Everything is fine, build the final URL
-            return `https://poliformat.upv.es/access/calendar/opaq/${uuid}/main.ics`;
-        });
+        await fetchAndRespond(request, response, poliformatUrlBuilder);
     });
     app.get('/intranet/:code', async (request, response) => {
-        await fetchAndRespond(request, response, (params) => {
-            /** @type {string} */
-            const code = params.code;
-
-            return `https://www.upv.es/ical/${code}`;
-        });
+        await fetchAndRespond(request, response, intranetUrlBuilder);
     });
 
     app.get('*', (req, response) => {
