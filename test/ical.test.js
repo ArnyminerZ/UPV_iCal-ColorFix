@@ -49,6 +49,18 @@ describe('iCal output test', function () {
         expect(error?.statusCode).to.be.equal(400);
         expect(error?.body).to.be.equal('400 - The given UUID is not valid');
     });
+    it('Check prefix', async function () {
+        const data = fs.readFileSync(path.join(samplesDir, 'sample-ical.ics')).toString();
+        overrideGet(() => new Promise((resolve) => resolve(data)));
+        const url = 'http://localhost:3000/intranet/1234?prefix=🙂';
+
+        const ics = await httpGet(url);
+        const response = await ical.async.parseICS(ics);
+        const events = Object.values(response);
+        /** @type {import('node-ical').VEvent} */
+        const event = events[0];
+        expect(event.summary).to.be.equal('🙂 XXXX');
+    });
     afterEach('Reset overwrites', function () {
         resetGet();
     });

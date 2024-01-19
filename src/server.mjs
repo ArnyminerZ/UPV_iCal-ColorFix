@@ -12,6 +12,7 @@ import {
     poliformatUrlPrefix,
     poliformatUrlSuffix
 } from "./url-builder.mjs";
+import {prefixEvents} from "./event-modifier.js";
 
 const app = express();
 
@@ -35,16 +36,22 @@ async function fetchAndRespond(
 ) {
     try {
         const url = urlBuilder(request.params);
-        const data = await get(url);
-        const fixedData = fix(data.toString());
-        const markdown = convertMarkdown(fixedData);
+        let data = await get(url);
+        data = fix(data.toString());
+        data = convertMarkdown(data);
+
+        const query = request.query;
+        /** @type {string|null} */
+        const prefix = query['prefix'];
+        if (prefix != null) data = prefixEvents(data, prefix);
+
         response
             // Set status to success
             .status(200)
             // Set content type to calendar
             .setHeader('Content-Type', 'text/calendar')
             // Send the data
-            .send(markdown);
+            .send(data);
     } catch (error) {
         if (error.hasOwnProperty('statusCode')) {
             const status = error['statusCode'];
