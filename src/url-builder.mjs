@@ -6,8 +6,11 @@ import {isUuid} from "uuidv4";
  * @return {string}
  */
 
-/** @type {UrlBuilder} */
-export const poliformatUrlBuilder = (params) => {
+/**
+ * @type {UrlBuilder}
+ * @readonly
+ */
+export let poliformatUrlBuilder = (params) => {
     /** @type {string} */
     const uuid = params.uid;
 
@@ -18,10 +21,29 @@ export const poliformatUrlBuilder = (params) => {
     return `https://poliformat.upv.es/access/calendar/opaq/${uuid}/main.ics`;
 }
 
-/** @type {UrlBuilder} */
-export const intranetUrlBuilder = (params) => {
+/**
+ * @type {UrlBuilder}
+ * @readonly
+ */
+export let intranetUrlBuilder = (params) => {
     /** @type {string} */
     const code = params.code;
 
     return `https://www.upv.es/ical/${code}`;
+}
+
+/**
+ * Updates the Poliformat URL builder to be used.
+ * @param {UrlBuilder} fun
+ */
+export function overwritePoliformat(fun) {
+    poliformatUrlBuilder = fun;
+}
+
+/**
+ * Updates the Intranet URL builder to be used.
+ * @param {UrlBuilder} fun
+ */
+export function overwriteIntranet(fun) {
+    intranetUrlBuilder = fun;
 }
