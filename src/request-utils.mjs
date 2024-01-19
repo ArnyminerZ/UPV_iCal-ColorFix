@@ -1,13 +1,30 @@
+import http from "http";
 import https from "https";
 
 /**
+ * @callback HttpRequestFunction
  * Makes an HTTP request (must be https) to the given URL.
  * @param {string} url The URL to make the request to.
  * @returns {Promise<string>}
  */
-export function get(url) {
+
+/**
+ * @typedef HttpError
+ * @property {number} statusCode
+ * @property {string} statusMessage
+ */
+
+/**
+ * Makes an HTTP request (must be https) to the given URL.
+ * The default behavior of the get function.
+ * @param {string} url The URL to make the request to.
+ * @throws {HttpError} If the server doesn't return a satisfying result.
+ * @returns {Promise<string>}
+ */
+export function httpGet(url) {
     return new Promise((resolve, reject) => {
-        https.get(url, {}, response => {
+        const protocol = url.startsWith("https:") ? https : http;
+        protocol.get(url, {}, response => {
             let data = [];
 
             response.on('data', chunk => data.push(chunk));
@@ -22,3 +39,17 @@ export function get(url) {
         });
     });
 }
+
+/**
+ * Makes an HTTP request (must be https) to the given URL.
+ * @type {HttpRequestFunction}
+ */
+export let get = httpGet;
+
+/**
+ * Overwrites the default behavior of `get`.
+ * @param {HttpRequestFunction} fun
+ */
+export function overrideGet(fun) { get = fun; }
+
+export function resetGet() { get = httpGet; }
