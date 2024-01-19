@@ -1,11 +1,11 @@
-name: test
+name: Run Node Tests
 
 on:
   push:
   pull_request:
 
 jobs:
-  docker:
+  test:
     runs-on: ubuntu-latest
     name: ✅ Test
     steps:

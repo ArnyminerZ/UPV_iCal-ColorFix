@@ -1,4 +1,4 @@
-name: docker-ci
+name: Docker Development Build & Release Draft
 
 on:
   push:
@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
   draft-release:
+    name: Update release draft
     runs-on: ubuntu-latest
     outputs:
       updated_version: ${{ steps.update_package.outputs.updated_version }}
