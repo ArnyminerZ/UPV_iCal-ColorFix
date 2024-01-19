@@ -58,7 +58,8 @@ async function fetchAndRespond(
             const message = error['statusMessage'] ?? status;
             response.status(status).send(message);
         } else {
-            response.status(500).send(JSON.stringify(error));
+            console.error('Could not process request. Error:', error);
+            response.status(500).send('500 - Check server logs');
         }
     }
 }
