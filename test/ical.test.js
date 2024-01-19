@@ -1,25 +1,15 @@
 import startServer from '../src/server.mjs';
+import {httpGet, overrideGet, resetGet} from "../src/request-utils.mjs";
+import {__dirname} from "./utils.js";
 
 import packageJson from "../package.json" assert { type: "json" };
 
 import {expect} from "chai";
-import http from "http";
 import ical from 'node-ical';
-import {overwritePoliformat, overwriteIntranet, intranetUrlBuilder, poliformatUrlBuilder} from "../src/url-builder.mjs";
+import fs from "node:fs";
+import path from "node:path";
 
-function get(url) {
-    return new Promise((resolve, reject) => {
-        http.get(url, {}, response => {
-            let data = [];
-
-            response.on('error', reject);
-            response.on('data', chunk => data.push(chunk));
-            response.on('end', () => {
-                resolve(data.join(''));
-            });
-        });
-    });
-}
+const samplesDir = path.join(__dirname, '..', 'sample');
 
 describe('iCal output test', function () {
     let server;
@@ -27,30 +17,40 @@ describe('iCal output test', function () {
         server = startServer(3000);
     });
     it('Check version', async function () {
-        const result = await get('http://localhost:3000/version');
+        const result = await httpGet('http://localhost:3000/version');
         expect(result).to.be.equal(packageJson.version);
     });
     it('Check has color', async function () {
-        const oldIntranet = intranetUrlBuilder;
-        const oldPoliformat = poliformatUrlBuilder;
-        try {
-            const builder = () => 'https://raw.githubusercontent.com/ArnyminerZ/UPV_iCal-ColorFix/master/sample/sample-invalid-ical.ics'
+        const data = fs.readFileSync(path.join(samplesDir, 'sample-invalid-ical.ics'));
+        overrideGet(() => new Promise((resolve) => resolve(data)));
+        const url = 'http://localhost:3000/intranet/1234';
 
-            overwriteIntranet(builder);
-            overwritePoliformat(builder);
-
-            const url = 'http://localhost:3000/intranet/1234';
-
-            const events = await ical.async.fromURL(url);
-            for (const event of Object.values(events)) {
-                if (event.type !== 'VEVENT') continue;
-                // Check that the event has a color
-                expect(event.color).to.not.be.null.and.not.be.undefined;
-            }
-        } finally {
-            overwriteIntranet(oldIntranet);
-            overwritePoliformat(oldPoliformat);
+        const ics = await httpGet(url);
+        const response = await ical.async.parseICS(ics);
+        const events = Object.values(response);
+        for (/** @type {import('node-ical').VEvent} */ const event of events) {
+            if (event.type !== 'VEVENT') continue;
+            // Check that the event has a color
+            expect(event.color)
+                .to.not.be.null
+                .and.not.be.undefined;
         }
+    });
+    it('Check PoliformaT UUID', async function () {
+        const invalidUrl = 'http://localhost:3000/poliformat/1234';
+        /** @type {HttpError|null} */
+        let error = null;
+        try {
+            const result = await httpGet(invalidUrl);
+            console.info('Result:', result);
+        } catch (e) {
+            error = e;
+        }
+        expect(error?.statusCode).to.be.equal(400);
+        expect(error?.body).to.be.equal('400 - The given UUID is not valid');
+    });
+    afterEach('Reset overwrites', function () {
+        resetGet();
     });
     after('Stop server', function () {
         server?.close();

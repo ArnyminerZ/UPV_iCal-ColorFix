@@ -12,6 +12,7 @@ import https from "https";
  * @typedef HttpError
  * @property {number} statusCode
  * @property {string} statusMessage
+ * @property {string?} body
  */
 
 /**
@@ -31,10 +32,12 @@ export function httpGet(url) {
             response.on('error', reject)
             response.on('end', () => {
                 const statusCode = response.statusCode;
-                if (statusCode > 200 && statusCode < 300)
-                    return reject({ statusCode, statusMessage: response.statusMessage });
-                const original = data.join('');
-                resolve(original);
+                const result = data.join('');
+                if (statusCode >= 200 && statusCode < 300) {
+                    resolve(result);
+                } else {
+                    reject({ statusCode, statusMessage: response.statusMessage, body: result });
+                }
             });
         });
     });

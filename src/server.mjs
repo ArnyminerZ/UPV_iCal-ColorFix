@@ -36,7 +36,7 @@ async function fetchAndRespond(
     try {
         const url = urlBuilder(request.params);
         const data = await get(url);
-        const fixedData = fix(data);
+        const fixedData = fix(data.toString());
         const markdown = convertMarkdown(fixedData);
         response
             // Set status to success
@@ -45,13 +45,14 @@ async function fetchAndRespond(
             .setHeader('Content-Type', 'text/calendar')
             // Send the data
             .send(markdown);
-    } catch (e) {
-        if (e.hasOwnProperty('statusCode')) {
-            const status = e['statusCode'];
-            const message = e['statusMessage'] ?? status;
+    } catch (error) {
+        if (error.hasOwnProperty('statusCode')) {
+            const status = error['statusCode'];
+            const message = error['statusMessage'] ?? status;
             response.status(status).send(message);
         } else {
-            response.status(500).send(e);
+            console.error('Could not handle request. Error:', error);
+            response.status(500).send(JSON.stringify(error));
         }
     }
 }
