@@ -51,7 +51,6 @@ async function fetchAndRespond(
             const message = error['statusMessage'] ?? status;
             response.status(status).send(message);
         } else {
-            console.error('Could not handle request. Error:', error);
             response.status(500).send(JSON.stringify(error));
         }
     }
