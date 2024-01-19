@@ -1,4 +1,4 @@
-import express, {response} from 'express';
+import express from 'express';
 import { isUuid } from 'uuidv4';
 
 import {convertMarkdown, fix} from "./parser.mjs";
