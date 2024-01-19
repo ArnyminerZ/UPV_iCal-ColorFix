@@ -20,7 +20,7 @@ function buildUrl(prefix, suffix, value) {
  * @type {UrlBuilder}
  * @readonly
  */
-export let poliformatUrlBuilder = (params) => {
+export function poliformatUrlBuilder(params) {
     /** @type {string} */
     const uuid = params.uid;
 
@@ -35,25 +35,9 @@ export let poliformatUrlBuilder = (params) => {
  * @type {UrlBuilder}
  * @readonly
  */
-export let intranetUrlBuilder = (params) => {
+export function intranetUrlBuilder(params) {
     /** @type {string} */
     const code = params.code;
 
     return buildUrl(intranetUrlPrefix, intranetUrlSuffix, code)
-}
-
-/**
- * Updates the Poliformat URL builder to be used.
- * @param {UrlBuilder} fun
- */
-export function overwritePoliformat(fun) {
-    poliformatUrlBuilder = fun;
-}
-
-/**
- * Updates the Intranet URL builder to be used.
- * @param {UrlBuilder} fun
- */
-export function overwriteIntranet(fun) {
-    intranetUrlBuilder = fun;
 }
