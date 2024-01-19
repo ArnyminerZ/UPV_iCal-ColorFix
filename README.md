@@ -39,6 +39,18 @@ Take the code missing above, and add it to
 http://localhost/poliformat/<CODE>
 ```
 
+## Modifiers
+
+There are some modifiers that you can add for customizing the returned events.
+
+### Prefixing
+
+If you want to add a prefix to the summary of every event, use the `?prefix=` argument. For example:
+```http request
+GET http://localhost/poliformat/<CODE>?prefix=🙂
+```
+In this case, for example, a received event with summary `Sample Event` would be returned as `🙂 Sample Event` instead.
+
 # Deploying
 ## Docker
 Docker is the preferred method for deploying the application. We provide a development
