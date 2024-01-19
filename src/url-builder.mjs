@@ -6,6 +6,16 @@ import {isUuid} from "uuidv4";
  * @return {string}
  */
 
+export const poliformatUrlPrefix = 'https://poliformat.upv.es/access/calendar/opaq/';
+export const poliformatUrlSuffix = '/main.ics';
+
+export const intranetUrlPrefix = 'https://www.upv.es/ical/';
+export const intranetUrlSuffix = '';
+
+function buildUrl(prefix, suffix, value) {
+    return prefix + value + suffix
+}
+
 /**
  * @type {UrlBuilder}
  * @readonly
@@ -18,7 +28,7 @@ export let poliformatUrlBuilder = (params) => {
     if (!isUuid(uuid)) throw { statusCode: 400, statusMessage: '400 - The given UUID is not valid' };
 
     // Everything is fine, build the final URL
-    return `https://poliformat.upv.es/access/calendar/opaq/${uuid}/main.ics`;
+    return buildUrl(poliformatUrlPrefix, poliformatUrlSuffix, uuid);
 }
 
 /**
@@ -29,7 +39,7 @@ export let intranetUrlBuilder = (params) => {
     /** @type {string} */
     const code = params.code;
 
-    return `https://www.upv.es/ical/${code}`;
+    return buildUrl(intranetUrlPrefix, intranetUrlSuffix, code)
 }
 
 /**
