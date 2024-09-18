@@ -2,7 +2,7 @@ import express from 'express';
 
 import {convertMarkdown, fix} from "./parser.mjs";
 
-import packageJson from "../package.json" assert { type: "json" };
+import packageJson from "../package.json" assert {type: "json"};
 import {get} from "./request-utils.mjs";
 import {
     intranetUrlBuilder,
@@ -64,7 +64,7 @@ async function fetchAndRespond(
     }
 }
 
-export default function (port = 80) {
+export default function (port = 8080) {
     app.get('/version', (req, res) => {
         res.status(200).send(packageJson.version);
     });
@@ -79,6 +79,10 @@ export default function (port = 80) {
     app.get('*', (req, response) => {
         // Take from 1 since all paths start with /
         const path = req.path.substring(1);
+        if (path.length <= 0) {
+            response.status(200).send('ok');
+            return
+        }
         const url = new URL(path);
         if (!url.hostname.includes('upv.es')) {
             response.status(400).send('400 - Invalid request. Forbidden domain');
