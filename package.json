@@ -28,7 +28,7 @@
   "homepage": "https://github.com/ArnyminerZ/UPV_iCal-ColorFix#readme",
   "dependencies": {
     "express": "^4.21.2",
-    "uuid": "^11.0.4"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "chai": "^5.1.2",
