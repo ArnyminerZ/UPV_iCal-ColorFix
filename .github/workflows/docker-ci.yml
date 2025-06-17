@@ -35,7 +35,7 @@ jobs:
           tag_name: ${{ steps.create_release.outputs.tag_name }}
         run: npm run --silent version >> $GITHUB_ENV
       - name: 🤖 Commit package.json changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v6
         if: ${{ env.UPDATED_VERSION == 'true' }}
         with:
           commit_message: ":robot: Update version of package.json"
