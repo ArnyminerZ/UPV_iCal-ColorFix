@@ -18,7 +18,7 @@ jobs:
       updated_version: ${{ steps.update_package.outputs.updated_version }}
     steps:
       - name: 🖥️ Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       # Drafts your next Release notes as Pull Requests are merged into "master"
       - name: 🗒️ Draft release
         uses: release-drafter/release-drafter@v7
